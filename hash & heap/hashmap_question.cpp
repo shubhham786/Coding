@@ -420,3 +420,42 @@ public:
      
         
     }
+
+    //leetcode 149
+    //max points on line
+    //good question
+    //considering unique elements
+     int maxPoints(vector<vector<int>>& points) {
+        
+
+       // map[-1]=0;
+        int ans=0;
+        for(int i=0;i<points.size();i++)
+        {
+            int x=0;
+                    unordered_map<double,int>map;
+            for(int j=i+1;j<points.size();j++)
+            {
+                 double m;
+                if((points[j][0]-points[i][0])!=0)
+                   m=(double)(points[j][1]-points[i][1])/(points[j][0]-points[i][0]);
+                else
+                    m=(int)1e9;
+               
+                if(map.find(m)==map.end())map[m]=1;
+                
+                else
+                    map[m]++;
+                
+               // cout<<j<<" "<<i<<" "<<m<<" "<<map[m]<<endl;
+                 
+                x=max(x,map[m]);
+            }
+            ans=max(ans,x+1);
+        }
+        
+       return ans;
+       
+     
+    }
+    
