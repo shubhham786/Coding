@@ -569,3 +569,115 @@ class comp{
 
             return ans;
     }
+
+// predecssor and successor in binary tree
+
+class allpair_01{
+      public:
+    TreeNode* pred=NULL;
+    TreeNode* prev=NULL;
+    TreeNode* succ=NULL;
+      
+};
+
+void allpair(TreeNode* root, allpair_01 pair,int data)
+{
+     if(root==NULL)
+        return;
+
+        allpair(root->left,pair,data);
+
+          if(root->val==data && pair.pred==NULL)
+              pair.pred=pair.prev;
+          
+         if(pair.prev!=NULL && pair.prev->val==data && pair.succ==NULL)
+             pair.succ=root;
+        
+        pair.prev=root;
+        allpair(root->right,pair,data);
+}
+
+ // ceil and floor value of a node in a binary tree
+ class allpair_02{
+      public:
+    TreeNode* pred=NULL;
+    TreeNode* prev=NULL;
+    TreeNode* succ=NULL;  
+   // ceil ->>just bara
+    int ceil=int(1e8);
+    int floor=-int(1e8);
+      
+};
+void allpair_ceil_floor(TreeNode* root, allpair_02 pair,int data)
+{
+     if(root==NULL)
+        return;
+
+        if(root->val <data)
+           pair.floor=max(pair.floor,root->val);
+        else
+             pair.ceil=min(pair.ceil,root->val);
+
+
+
+        allpair_ceil_floor(root->left,pair,data);
+
+          if(root->val==data && pair.pred==NULL)
+              pair.pred=pair.prev;
+          
+         if(pair.prev!=NULL && pair.prev->val==data && pair.succ==NULL)
+             pair.succ=root;
+        
+        pair.prev=root;
+        allpair_ceil_floor(root->right,pair,data);
+}
+//leetcode 105
+ TreeNode* buildTree(vector<int>& preorder,int sip,int eip, vector<int>& inorder,int sii,int eii)
+    {
+        if(sip>eip)
+            return NULL;
+         
+          TreeNode * root=new TreeNode(preorder[sip]);
+        
+          int idx=sii;
+           while(inorder[idx]!=preorder[sip])
+               idx++;
+             
+        int tnel=idx-sii;
+           root->left=buildTree(preorder,sip+1,sip+tnel,inorder,sii,idx-1);
+          root->right=buildTree(preorder,sip+tnel+1,eip,inorder,idx+1,eii);
+        
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        
+        return buildTree(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);
+    }
+
+    //leetcode 106
+     TreeNode* buildTree(vector<int>& postorder,int sip,int eip, vector<int>& inorder,int sii,int eii)
+    {
+        if(sip>eip)
+            return NULL;
+         
+          TreeNode * root=new TreeNode(postorder[eip]);
+        
+          int idx=sii;
+           while(inorder[idx]!=postorder[eip])
+               idx++;
+             
+        int tnel=idx-sii;
+                  
+        
+           root->left=buildTree(postorder,sip,sip+tnel-1,inorder,sii,idx-1);
+          root->right=buildTree(postorder,sip+tnel,eip-1,inorder,idx+1,eii);
+
+        return root;
+    }
+    
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        
+        return buildTree(postorder,0,postorder.size()-1,inorder,0,inorder.size()-1);
+    }
+
+   
