@@ -680,4 +680,249 @@ void allpair_ceil_floor(TreeNode* root, allpair_02 pair,int data)
         return buildTree(postorder,0,postorder.size()-1,inorder,0,inorder.size()-1);
     }
 
-   
+   //leetcode 889
+
+    TreeNode* buildTree(vector<int>& postorder,int ppsi,int ppei, vector<int>& preorder,int psi,int pei)
+    {
+        if(psi>pei)
+            return NULL;
+         
+
+         if(psi==pei)return new TreeNode(preorder[psi]);
+
+          TreeNode * root=new TreeNode(preorder[psi]);
+        
+          int idx=ppsi;
+           while(postorder[idx]!=preorder[psi+1])
+               idx++;
+             
+        int tnel=idx-ppsi+1;
+                  
+        
+           root->left=buildTree(postorder,ppsi,idx,preorder,psi+1,psi+tnel);
+          root->right=buildTree(postorder,idx+1,ppei-1,preorder,psi+tnel+1,pei);
+
+        return root;
+    }
+    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+
+
+     return buildTree(post,0,post.size()-1,pre,0,pre.size()-1);   
+    }
+
+    //leetcode 114
+    //T- o(n^2)
+      TreeNode* tail(TreeNode* root){
+        
+        if(root->left==NULL)
+            return NULL;
+        
+        TreeNode* temp=root->left;
+           
+        while(temp->right!=NULL)
+             temp=temp->right;
+        
+        
+        return temp;
+            
+    }
+
+    void flatten(TreeNode* root) {
+        
+        if(root==NULL)
+             return;
+        
+        flatten(root->left);
+        flatten(root->right);
+        
+        TreeNode *ptr=tail(root);
+        
+        //cout<<root->val;
+        if(ptr!=nullptr){
+        TreeNode *temp=root->right;
+        root->right=root->left;
+        ptr->right=temp;
+         root->left=NULL;
+        
+        } 
+       // return root;
+        
+    }
+
+    //leetcode 114
+     //method-2
+   // T-O(n)
+    TreeNode* flatten1(TreeNode* root){
+        
+        
+        if(root==NULL || root->left==NULL && root->right==NULL)return root;
+        
+        TreeNode* leftptr=flatten1(root->left);
+        TreeNode* rightptr=flatten1(root->right);
+        
+        
+        if(leftptr!=NULL)
+        {
+            leftptr->right=root->right;
+            root->right=root->left;
+            root->left=NULL;
+        }
+        
+        return rightptr!=NULL?rightptr:leftptr;
+        
+        
+    }
+        
+    void flatten(TreeNode* root) {
+        
+        if(root==NULL)
+            return;
+        
+        flatten1(root);
+        
+        
+    }
+
+    //lintcode 1534
+     TreeNode *dummy=new TreeNode(-1);
+    TreeNode *prev1=dummy;
+
+    void treeToDoublyList_1(TreeNode * root) 
+    {
+       if(root==NULL)
+          return;
+
+           treeToDoublyList_1(root->left);
+
+           prev1->right=root;
+           root->left=prev1;
+
+           prev1=root;
+
+           treeToDoublyList_1(root->right);  
+    }
+    TreeNode * treeToDoublyList(TreeNode * root) {
+        // Write your code here.
+          if(root==NULL)
+            return NULL;
+
+            treeToDoublyList_1(root);
+
+            TreeNode * head=dummy->right;
+            head->left=NULL;
+            dummy->right=NULL;
+
+            head->left=prev1;
+            prev1->right=head;
+
+            return head;
+
+    }
+
+ int idx = 0;
+
+    TreeNode* createTree(vector<int>& arr) {
+        if (idx == arr.size() || arr[idx] == -1) {
+            idx++;
+            return NULL;
+        }
+        TreeNode* node = new TreeNode(arr[idx++]);
+        node->left = createTree(arr);
+        node->right = createTree(arr);
+
+        return node;
+    }
+
+    void serializeTree(TreeNode* node, vector<int>& arr) {
+        if (node == nullptr) {
+            arr.push_back(-1);
+            return;
+        }
+
+        arr.push_back(node->val);
+        serializeTree(node->left, arr);
+        serializeTree(node->right, arr);
+
+    }
+
+    //leetcode 297
+     
+    string s="";
+    
+    void serialize1(TreeNode* root)
+    {
+        if(root==nullptr)
+        {
+            s+='a';
+           // cout<<s<<" "<<endl;
+            return;
+        }
+        
+        s+=to_string(root->val);
+        s+=" ";
+        
+        serialize1(root->left);
+        serialize1(root->right);
+    }
+    string serialize(TreeNode* root) {
+        serialize1(root);
+        
+        return s;
+        
+    }
+
+    // Decodes your encoded data to tree.
+    int idx=0;
+    TreeNode* deserialize(string data) {
+      //  int l;
+        //if(idx<data.size())
+          //  l=stoi(data[idx]);
+        
+        if(idx==data.size() || data[idx]=='a')
+        {
+            idx++;
+            
+            return NULL;
+        }
+        //cout<<data[1]<<endl;
+        //cout<<idx<<" ";
+        int l;
+        if(data[idx]=='-')
+        {
+            idx++;
+            l=data[idx]-'0';
+            //l=0-l;
+            
+              while(data[++idx]!=' '){
+
+                  l=l*10;
+                 l=l+data[idx]-'0';
+                  //idx++;
+              }
+            
+            l=0-l;
+        }
+        else
+        {
+            //l=data[idx]-'0';
+            l=data[idx]-'0';
+            //l=0-l;
+            //cout<<"1"<<endl;
+              while(data[++idx]!=' '){
+
+                  l=l*10;
+                 l=l+data[idx]-'0';
+                  //idx++;
+              }
+        }
+        idx++;
+         TreeNode* root=new TreeNode(l);
+        //cout<<root->val<<endl;
+          root->left=deserialize(data);
+        
+        root->right=deserialize(data);
+        
+        
+        return root;
+        
+    }

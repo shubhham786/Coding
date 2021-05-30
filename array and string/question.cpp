@@ -1351,6 +1351,85 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k)
         return ans;
         
     }
+    //leetcode 922
+     vector<int> sortArrayByParityII(vector<int>& nums) {
+        
+        for(int i=0,j=1;i<nums.size(),j<nums.size();i+=2,j+=2)
+        {
+            
+            while(i<nums.size() && (nums[i]&1)==0)i+=2;
+            while(j<nums.size() && (nums[j]&1)==1)j+=2;
+            
+            if(i<nums.size())swap(nums[i],nums[j]);
+        }
+        
+        return nums;
+        
+    }
+    //leetcode 1395
+     
+     //less[left] * greater[right] + greater[left] * less[right]
+    int numTeams(vector<int>& rating) {
+        
+        int res=0;
+        //un elements ko check karo jinke liye left and right dono exist karte hoon
+        //isliye 1 se arr.size()-2 tak
+       for(int i=1;i<rating.size()-1;i++)
+       {
+           vector<int>less(2); 
+           //less[0]=a[j] >a[i] && j<i
+           //less[1]=a[j]>a[i] && j>i
+           vector<int>greater(2);
+            //greater[0]=a[j]<a[i] && j<i
+           //greater[1]=a[j]<a[i] && j>i
+           
+           for(int j=0;j<rating.size();j++)
+           {
+               if(rating[i]>rating[j])
+                   ++greater[j>i];
+               else if(rating[i]<rating[j])
+                   ++less[j>i];
+           }
+           
+           res+=less[0]*greater[1]+less[1]*greater[0];
+       }
+        
+        return res;
+        
+    }
+    //leetcode 31
+    //https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order
+
+        
+    /*The following algorithm generates the next permutation lexicographically after a given permutation. It changes the given permutation in-place.
+
+1.Find the largest index k such that a[k] < a[k + 1]. If no such index exists, the permutation is the last permutation.
+2.Find the largest index l greater than k such that a[k] < a[l].
+3.Swap the value of a[k] with that of a[l].
+4.Reverse the sequence from a[k + 1] up to and including the final element a[n].
+  */  
+    void nextPermutation(vector<int>& nums) {
+          
+        int n=nums.size(),k,l;
+        
+          for(k=n-2;k>=0;k--)
+          {
+              if(nums[k]<nums[k+1])
+                  break;
+          }
+        
+        if(k<0)
+            reverse(nums.begin(),nums.end());
+        else
+        {
+            for(l=n-1;l>k;l--)
+                if(nums[l]>nums[k])
+                    break;
+            
+            swap(nums[l],nums[k]);
+            reverse(nums.begin()+k+1,nums.end());
+        }
+    }
 int main()
 {
     
