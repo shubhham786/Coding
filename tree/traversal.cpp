@@ -3,6 +3,8 @@
  #include<vector>
  #include<algorithm>
  #include<unordered_map>
+ #include<stack>
+ #include<list>
  using namespace std;
 
  
@@ -926,3 +928,158 @@ void allpair_ceil_floor(TreeNode* root, allpair_02 pair,int data)
         return root;
         
     }
+
+    //morris traversl
+
+
+    TreeNode* rightmostnode(TreeNode * curr,TreeNode* node)
+    {
+        while(node->right!=NULL && node->right!=curr)
+           node=node->right;
+
+
+           return node;
+
+    }
+
+    void morrisintravesral(TreeNode* root)
+    {
+        TreeNode *curr=root;
+
+               while(curr!=nullptr)
+               {
+                   TreeNode* next=curr->left;
+                  // cout<<curr->val<<" ";
+
+                    if(next==nullptr){
+                     cout<<curr->val<<" ";
+                     curr=curr->right;
+                    }
+                    else
+                    {
+                        TreeNode *rightmost=rightmostnode(curr,next);
+
+                        if(rightmost->right==NULL)
+                        {
+                           rightmost->right=curr;
+                           curr=curr->left;
+                        }
+                        else
+                        {
+                            rightmost->right=NULL;
+                            cout<<curr->val<<" ";
+                            curr=curr->right;
+                        }
+                    }
+                    
+               }
+    }
+     TreeNode* rightmostnode(TreeNode * curr,TreeNode* node)
+    {
+        while(node->right!=NULL && node->right!=curr)
+           node=node->right;
+
+
+           return node;
+
+    }
+
+    void morrisintravesral(TreeNode* root)
+    {
+        TreeNode *curr=root;
+
+               while(curr!=nullptr)
+               {
+                   TreeNode* next=curr->left;
+                   //cout<<curr->val<<" ";
+                   
+                    if(next==nullptr){
+                    cout<<curr->val<<" ";
+                     curr=curr->right;
+                    }
+                    else
+                    {
+                        TreeNode *rightmost=rightmostnode(curr,next);
+
+                        if(rightmost->right==NULL)
+                        {
+                           rightmost->right=curr;
+                            cout<<curr->val<<" ";
+                           curr=curr->left;
+                        }
+                        else
+                        {
+                            rightmost->right=NULL;
+                          
+                            curr=curr->right;
+                        }
+                    }
+                    
+               }
+    }
+
+/* Bug hai isme
+//stack ke memory ko update hi nahi kar raha hai
+    class pair1{
+
+        public:
+
+             TreeNode * node;
+             bool isleft=false;
+             bool isself=false;
+             bool isright=false;
+
+             pair1(TreeNode* root,bool isleft,bool isself,bool isright)
+             {
+                 this->node=root;
+                 this->isleft=isleft;
+                 this->isself=isself;
+                 this->isright=isright;
+             }
+    };
+
+
+    void traversal(TreeNode * root)
+    {
+           list<pair1>ll;
+           ll.push_back(pair1(root,false,false,false));
+
+             while(ll.size()!=0)
+             {
+                 pair1 l=ll.front();
+                 
+                 if(!l.isleft)
+                 {
+                      l.isleft=true;
+                     if(l.node->left!=nullptr)
+                           ll.push_front(pair1(l.node->left,false,false,false));
+                       
+                      
+
+                 }
+                 else if(!l.isself)
+                 {
+                     l.isself=true;
+                     cout<<l.node->val<<" ";
+                 }
+                 else if(!l.isright)
+                 {
+                     l.isright=true;
+                     if(l.node->right!=NULL)
+                       ll.push_front(pair1(l.node->right,false,false,false));
+
+                       
+                 }
+                 else
+                 {
+                     ll.pop_front();
+                 }
+                 
+
+             }
+
+
+
+
+    }
+    */

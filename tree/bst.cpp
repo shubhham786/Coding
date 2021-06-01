@@ -449,3 +449,24 @@ p Node inorderSuccessor(Node node) {
          int i=0;
         return bstFrom_Preorder(pre,in,0,in.size()-1,i);
     }
+
+       
+    //method-2
+    int bst_idx=0;
+    //lr->left range, rr->right range
+    TreeNode* bstFromPreorder1(vector<int>& pre,int lr,int rr){
+        if(bst_idx==pre.size() || pre[bst_idx]<lr || pre[bst_idx]>rr)
+            return NULL;
+        
+        TreeNode* node=new TreeNode(pre[bst_idx++]);
+        
+        node->left=bstFromPreorder1(pre,lr,node->val);
+        node->right=bstFromPreorder1(pre,node->val,rr);
+        
+        return node;
+    }
+  
+     TreeNode* bstFromPreorder(vector<int>& pre){
+         
+         return bstFromPreorder1(pre,-(int)1e9,(int)1e9);
+     }
