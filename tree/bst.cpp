@@ -3,6 +3,7 @@
  #include<vector>
  #include<algorithm>
  #include<unordered_map>
+ #include<list>
  using namespace std;
 
  
@@ -470,3 +471,131 @@ p Node inorderSuccessor(Node node) {
          
          return bstFromPreorder1(pre,-(int)1e9,(int)1e9);
      }
+
+     //https://practice.geeksforgeeks.org/problems/convert-level-order-traversal-to-bst/1
+
+     //bst from level order
+
+struct Node {
+    int data;
+    Node* right;
+    Node* left;
+    
+    Node(int x){
+        data = x;
+        right = NULL;
+        left = NULL;
+    }
+};
+//Function to construct the BST from its given level order traversal.
+class pair2{
+
+public:
+    Node* par=NULL;
+
+    int l_min=-(int)1e9;
+    int r_max=(int)1e9;
+
+    pair2()
+    {
+
+    }
+
+    pair2(Node* par,int l_min,int r_max)
+    {
+        this->par=par;
+        this->l_min=l_min;
+        this->r_max=r_max;
+    }
+};
+Node* constructBst(int arr[], int n)
+{
+    // Code here
+    list<pair2>que;
+      
+      pair2 l;
+        int idx=0;
+      que.push_back(l);
+      Node* root=NULL;
+         while(que.size()!=0 && idx<n)
+         {
+             pair2 l1=que.front();
+              que.pop_front();
+             if(arr[idx]<l1.l_min || arr[idx]>l1.r_max)continue;
+
+           Node * curr=new Node(arr[idx++]);
+            if(l1.par==NULL)
+            {
+                root=curr;
+
+            }
+            else
+            {
+                if(curr->data<l1.par->data)
+                   l1.par->left=curr;
+                else
+                   l1.par->right=curr;   
+            }
+
+
+            que.push_back(pair2(curr,l1.l_min,curr->data));
+            que.push_back(pair2(curr,curr->data,l1.r_max));
+
+            
+
+         }
+         
+
+    return root;    
+    
+}
+
+//https://practice.geeksforgeeks.org/problems/construct-tree-from-inorder-and-levelorder/1#
+
+// bt tree from level order and inorder
+
+Node* buildTree(int inorder[], int levelOrder[], int iStart, int iEnd,int n)
+{
+//add code here.
+   // cout<<n<<endl;
+   //cout<<iStart<<" "<<iEnd<<endl;
+    if(iStart>iEnd)return NULL;
+    //return new Node(levelOrder[0]);
+    
+    Node * root=new Node(levelOrder[0]);
+    if(iStart==iEnd)return root;
+    
+    int idx=iStart;
+      while(inorder[idx]!=levelOrder[0])
+         idx++;
+         
+         int ttl=idx-iStart;
+        // cout<<ttl<<" ";
+         //cout<<root->key<<" "<<idx<<endl;
+         int level_left[ttl];
+           
+           int level_right[iEnd-ttl];
+           //cout<<iEnd-ttl<<" "<<endl;
+          unordered_map<int,int>map;
+          
+          for(int i=iStart;i<idx;i++)
+          {
+              map[inorder[i]]++;
+          }
+          int idx_l=0;
+          int idx_r=0;
+          for(int i=1;i<n;i++)
+          {
+              if(map.find(levelOrder[i])!=map.end())
+                 level_left[idx_l++]=levelOrder[i];
+              else
+                 level_right[idx_r++]=levelOrder[i];
+          }
+          
+          //cout<<endl;
+         root->left=buildTree(inorder,level_left,iStart,idx-1,ttl);
+         root->right=buildTree(inorder,level_right,idx+1,iEnd,iEnd-ttl);
+         
+         return root;
+}
+
