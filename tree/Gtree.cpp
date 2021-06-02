@@ -192,3 +192,24 @@ int burningtree(Node* root,int d1,vector<vector<int>>&ans)
 
        return time;
 }
+
+//flateen a generic tree
+//tough question of generic tree
+//observe the loop has started from backward
+
+     Node* flattern(Node* node) {
+        if (node->childen.size() == 0)
+            return node;
+
+        int n = node->childen.size();
+        Node* lchild = node->childen[n-1];
+        Node* gTail = flattern(lchild);
+
+        for (int i = n - 2; i >= 0; i--) {
+            Node* tempTail = flattern(node->childen[i]);
+            tempTail->childen.push_back(node->childen[i + 1]);
+            node->childen.pop_back();
+        }
+
+        return gTail;
+    }
