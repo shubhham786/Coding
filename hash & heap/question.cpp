@@ -602,7 +602,7 @@ int kthSmallest(vector<vector<int>>& matrix, int k) {
         
         while(k-->0)
         {
-            while(pq.size()!=0 and pq.top()[0]<=w)
+            while(pq.size()!=0 && pq.top()[0]<=w)
             {
                 pq1.push({pq.top()[1],pq.top()[0]});
                 pq.pop();

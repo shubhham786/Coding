@@ -692,3 +692,190 @@ void prepare_ans(vector<vector<int>>& ans,vector<vector<int>>&smallans,int& fix_
         
         return count;
     }
+
+    //leetcode 658
+     bool pos(vector<int>& arr,int x,int &pos1)
+    {
+        int si=0;
+        int ei=arr.size()-1;
+        
+         while(si<=ei)
+         {
+             int mid=(si+ei)/2;
+             
+             if(arr[mid]==x){
+                 pos1=mid;
+                 return true;
+             }  
+             
+             else if(arr[mid]>x)
+                 ei=mid-1;
+             else
+                 si=mid+1;
+             
+         }
+        
+        pos1=si;
+        
+        return false;
+    }
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        
+        int pos1=0;
+        bool l=pos(arr,x,pos1);
+          //cout<<pos1;  
+            vector<int>ans;
+         int i=pos1-1;
+         int j=pos1;
+        if(l==true){
+            ans.push_back(x);
+             i=pos1-1;
+            j=pos1+1;
+             k--;
+        }  
+           while(i>=0 && j<arr.size() && k-->0)
+           {
+               if(abs(arr[i]-x)<=abs(arr[j]-x))
+                   ans.push_back(arr[i--]);
+               else
+                   ans.push_back(arr[j++]);
+           }
+        
+           while(i>=0 && k-->0)
+           {
+               ans.push_back(arr[i--]);
+           }
+        
+          while(j<arr.size() && k-->0)
+          {
+              ans.push_back(arr[j++]);
+          }
+               
+        
+        sort(ans.begin(),ans.end());
+        
+        return ans;
+        
+            
+    }
+
+    //another_best _method
+      int pos(vector<int>& arr,int x)
+    {
+        int si=0;
+        int ei=arr.size()-1;
+        
+         while(si<=ei)
+         {
+             int mid=(si+ei)/2;
+             
+             if(arr[mid]==x){
+            
+                 return mid;
+             }  
+             
+             else if(arr[mid]>x)
+                 ei=mid-1;
+             else
+                 si=mid+1;
+             
+         }
+        
+        //pos1=si;
+        
+        return si;
+    }
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        
+       // int pos1=0;
+        int l=pos(arr,x);
+          //cout<<pos1;  
+        int n=arr.size();
+        int lr=max(0,l-k);
+        int rr=min(n-1,l+k);
+           // vector<int>ans;
+         
+          while((rr-lr+1)>k)
+          {
+               if(x-arr[lr] > arr[rr]-x)
+                   lr++;
+               else
+                   rr--;
+          }
+            
+        return {arr.begin()+lr,arr.begin()+rr+1};
+    }
+
+
+    //O(log(n)+ k)
+      vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+       
+        
+          int n=arr.size();
+        
+            
+           if(x<=arr[0])
+               return {arr.begin(),arr.begin()+k};
+           else if(x>=arr[n-1])
+               return {arr.end()-k,arr.end()};
+          else
+          {
+              int si=0,ei=n-k;
+                
+                  while(si<ei)
+                  {
+                      int mid=(si+ei)/2;
+                      
+                       if(abs(arr[mid]-x)>abs(arr[mid+k]-x))
+                           si=mid+1;
+                       else
+                           ei=mid;
+                  }
+              
+              return {arr.begin()+si,arr.begin()+si+k};
+          }
+    }
+
+    //leetcode 300
+        
+    int insert_position(vector<int>&ans,int data)
+    {
+        int si=0,ei=ans.size()-1;
+        
+         while(si<=ei)
+         {
+             int mid=(si+ei)/2;
+             
+               if(ans[mid]<=data)
+                   si=mid+1;
+               else
+                   ei=mid-1;
+         }
+        
+        int laspos=si-1;
+        return  laspos>=0 && data==ans[laspos]?laspos:si;
+    }
+    
+    int lengthOfLIS(vector<int>& nums) {
+        
+        
+        
+        vector<int>ans;
+       // ans.push_back(nums[0]);
+        
+        for(int i=0;i<nums.size();i++)
+        {
+            int k=insert_position(ans,nums[i]);
+            
+            //if(ans[k]<nums[i])
+              //  ans[k]=nums[k]
+            //cout<<ans.size()<<" "<<k<<endl;
+            //cout<<k<<endl;
+             if(k==ans.size())
+               ans.push_back(nums[i]); // 
+            else
+                ans[k]=nums[i];
+        }
+        
+        return ans.size();
+    }
