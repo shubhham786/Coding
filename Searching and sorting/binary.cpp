@@ -879,3 +879,135 @@ void prepare_ans(vector<vector<int>>& ans,vector<vector<int>>&smallans,int& fix_
         
         return ans.size();
     }
+
+    //leetcode 875
+       bool ispossibletoeat(vector<int>& piles,int h, int eat_speed)
+    {
+        int hour=0;
+        
+         for(int i=piles.size()-1;i>=0;i--)
+         {
+             hour+= ceil(piles[i]/(eat_speed* 1.0));
+            // cout<<hour<<endl;
+             if(hour>h)
+                 return false;
+         }
+        
+        return true;
+    }
+    int minEatingSpeed(vector<int>& piles, int h) {
+        
+        
+        int si=1,ei=(int)1e9;
+        
+         // return 0;
+            while(si<ei)
+            {
+                int mid=(si+ei)/2;
+                
+            //  cout<<mid<<endl;  
+                if(!ispossibletoeat(piles,h,mid))
+                    si=mid+1;
+                else
+                    ei=mid;
+            }
+        
+        return si;
+    }
+
+    //leetcode 1011
+    bool canbeshiped(vector<int>& arr,int count,int days)
+    {
+        int d=1; //days has to start with 1
+        int c=0;
+        for(int i=0;i<arr.size();i++)
+        {
+            if(arr[i]>count)
+                return false;
+            
+            c+=arr[i];
+            
+            if(c>count)
+            {
+                d++;
+                
+                c=arr[i];
+                
+                if(d>days)
+                    return false;
+            
+            }
+        }
+        
+        return true;
+    }
+    int shipWithinDays(vector<int>& weights, int days) {
+        
+        
+        int si=1,ei=(int)1e7;
+        
+          while(si<ei)
+          {
+              int mid=(si+ei)/2;
+              
+              if(!canbeshiped(weights,mid,days))
+                  si=mid+1;
+              else
+                  ei=mid;
+          }
+        
+        
+        return si;
+    }
+
+     bool canbeshiped(vector<int>& arr,int count,int days)
+    {
+        int d=1; //days has to start with 1
+        int c=0;
+        for(int i=0;i<arr.size();i++)
+        {
+            //if(arr[i]>count)
+              //  return false;   // iska zaarourt nahi hai yahan
+            
+            c+=arr[i];
+            
+            if(c>count)
+            {
+                d++;
+                
+                c=arr[i];
+                
+                if(d>days)
+                    return false;
+            
+            }
+        }
+        
+        return true;
+    }
+    int shipWithinDays(vector<int>& weights, int days) {
+        
+        int sum=0,max_ele=0;
+        
+        for(int ele:weights)
+        {
+            sum+=ele;
+            
+          max_ele=max(max_ele,ele);
+        }
+                
+        int si=max_ele,ei=sum;//si=max ele, ei=sum
+        
+          while(si<ei)
+          {
+              int mid=(si+ei)/2;
+              
+              if(!canbeshiped(weights,mid,days))
+                  si=mid+1;
+              else
+                  ei=mid;
+          }
+        
+        
+        return si;
+    }
