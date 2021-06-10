@@ -1011,3 +1011,79 @@ void prepare_ans(vector<vector<int>>& ans,vector<vector<int>>&smallans,int& fix_
         
         return si;
     }
+
+    //lintcode 848
+    ///very confusing question
+
+    
+     bool ispossible(vector<int> &stations,double x,int k)
+     {
+         int count=0;
+
+         for(int i=1;i<stations.size();i++)
+          {
+              count+=(int) ((stations[i]-stations[i-1])/x); 
+          }
+
+          return count<=k;
+     }
+    double minmaxGasDist(vector<int> &stations, int k) {
+        // Write your code here\
+
+           double delta= 1e-6;
+
+            double si=0.0, ei=1e8;
+
+             while((ei-si)>delta)
+             {
+                 double mid=(si+ei)/2.0;
+
+                 if(ispossible(stations,mid,k))
+                      ei=mid;
+                 else
+                  si=mid+1e-6; 
+             }
+           
+           return si;
+    }
+
+
+    //leetcode 69
+        int mySqrt(int x) {
+    
+        
+        long si=0,ei=(long)1e9;
+        int ans;
+          while(si<=ei)
+          {
+              long mid=(si+ei)/2;
+              
+               if(mid*mid == (long)x)
+                   return (int)mid;
+               
+                else if(mid*mid > (long)x)
+                    ei=mid-1;
+                else{
+                    ans=(int)mid;
+                     si=mid+1;
+                } 
+          }
+        //int a=ans;
+       float z=(float)ans;
+        
+       int p=5;
+        
+        float inc=0.1;
+        
+         for(int i=1;i<5;i++)
+         {
+              while(z*z<=x)
+                  z=z+inc;
+             
+             z=z-inc;
+             inc=inc/10;
+         }
+        
+        cout<<z;
+        return ans;
+    }
