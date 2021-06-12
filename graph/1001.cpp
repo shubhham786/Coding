@@ -177,12 +177,10 @@ heavypair heavypath(int src,int dest,vector<bool>&vis)
 // hamintonialPathAndCycle
 int hamintonialPathAndCycle(int src,int osrc, int totaledge,vector<bool>& vis,string psf)
 {
-   
-    if(totaledge==N-1)
+   if(totaledge==N-1)
     {
-         int idx= searchedge_in_vtx(osrc,src);
-
-         if(idx==-1)
+         int idx= searchedge_in_vtx(osrc,src); 
+          if(idx==-1)
          {
              cout<<"hamintonialpath :  "<< psf+to_string(src)+" ";
          }
@@ -190,34 +188,19 @@ int hamintonialPathAndCycle(int src,int osrc, int totaledge,vector<bool>& vis,st
          {
              cout<<"hamintonialcycle: "<<psf+to_string(src)+" ";
          }
-
-         cout<<endl;
-
-         return 1;
+     cout<<endl;
+       return 1;
     }
-
-
-  
         vis[src]=true;
         int count=0;
-
         for(Edge e: graph[src])
         {  
             if(vis[e.v]==false)
               count+= hamintonialPathAndCycle(e.v,osrc,totaledge+1,vis,psf+to_string(src)+" ");
-
-
         }
-
-
         vis[src]=false;
-
         return count;
-   
-     
-
-
-}
+   }
 
 
 int hamintonialPathAndCycle(int src)
@@ -281,9 +264,6 @@ void constructgraph()
     addEdge(5, 6, 3);
     addEdge(0, 6, 3);
 }
-
-    
-
 
 int main(){
    
