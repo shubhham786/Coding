@@ -202,10 +202,10 @@ bool dfs(int n, vector<vector<int>>&graph)
       
           for(int j: graph[src])
           {
-              if(vis[j]==-1)
+              if(vis[j]==-1)// unvisited
                  res=res || iscycle_df(j,vis,ans,graph);
               else if(vis[j]==0)
-                  return true;   
+                  return true;  // there is cycle 
           }
 
    
@@ -249,5 +249,89 @@ bool dfs(int n, vector<vector<int>>&graph,vector<int>&ans)
             return ans;
       else
           return  {};
+        
+    }
+
+
+    //leetcode 329
+
+     int longestIncreasingPath(vector<vector<int>>& matrix) {
+        
+        
+        
+         int n=matrix.size();
+        
+        int  m= matrix[0].size();
+        
+           vector<vector<int>>dir={{0,-1},{0,1},{1,0},{-1,0}};
+        
+              vector<vector<int>>indegree(n,vector<int>(m,0));
+           queue<int>que;
+            
+           for(int i=0;i<n;i++)
+           {
+               for(int j=0;j<m;j++)
+               {
+                   
+                      int count=0;
+                    for(int k=0;k<4;k++)
+                    {
+                        int r=i+dir[k][0];
+                        int c=j+dir[k][1];
+                        
+                        if(r>=0 && c>=0 && r<n && c<m && matrix[i][j] > matrix[r][c])
+                             count++;
+                    }
+                   
+                      indegree[i][j]=count;
+                   
+                    if(count==0)
+                          que.push(i*m+j);
+               }
+           }
+         // cout<<indegree
+         
+        
+           int level=0;
+             
+            while(que.size()!=0)
+            {
+                int size=que.size();
+                  
+                   while(size-->0)
+                   {
+                       int front=que.front();
+                       que.pop();
+                         int row=front/m;
+                         int col=front%m;
+                       
+                       for(int i=0;i<4;i++)
+                       {
+                           int r=row+dir[i][0];
+                           int c=col+dir[i][1];
+                           
+                           // this condition
+                           //matrix[r][c] >matrix[row][col] 
+                           //[[0],[1],[5],[5]] for these type of test cases
+                         
+                           if(r>=0 && c>=0 && r<n && c<m && matrix[r][c] >matrix[row][col] && --indegree[r][c]==0)
+                           {
+                               //  cout<<r <<" "<<c<<endl;
+                              // cout<<level<<endl;
+                               que.push(r*m+c);
+                           }
+                       }
+                       
+                   }
+                
+                level++;
+            }
+          
+        
+         
+          return level;
+        
+           
+        
         
     }

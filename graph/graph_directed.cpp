@@ -125,18 +125,14 @@ vector<int> khan_algo()
 //-1->unvisited
 //0-part of my path
 //1-> visited but not part of my current path
-bool iscycle_df(int src,vector<int>&vis, vector<int>&ans)
+bool iscycle_dfs(int src,vector<int>&vis, vector<int>&ans)
 {
-      
-
       vis[src]=0;
- 
-        bool res=true;
-      
-          for(Edge j: graph[src])
+      bool res=true;
+         for(Edge j: graph[src])
           {
               if(vis[j.v]==-1)
-                 res=res && iscycle_df(j.v,vis,ans);
+                 res=res && iscycle_dfs(j.v,vis,ans);
               else if(vis[j.v]==0)
                   return false;   
           }
@@ -144,9 +140,7 @@ bool iscycle_df(int src,vector<int>&vis, vector<int>&ans)
     ans.push_back(src);
           vis[src]=1;
 
-          return res;
-
-         
+          return res;        
 }
 
 void dfs()
@@ -158,11 +152,62 @@ void dfs()
        for(int i=0;i<N;i++)
        {
            if(vis[i]==-1)
-               res =res&&iscycle_df(i,vis,ans);
+               res =res&&iscycle_dfs(i,vis,ans);
        }
 
          
 }
+void dfs_SCC( vector<vector<Edge>> &graph,int src,vector<bool> &vis,vector<int> &ans)
+{
+    vis[src]=true;
+
+    for(Edge j:graph[src])
+    {
+         if(!vis[j.v])
+            dfs_SCC(graph,j.v,vis,ans);
+    }
+
+    ans.push_back(src);
+}
+
+//Kosaraju
+void kosaraju()
+{
+    vector<bool> vis(N, false);
+    vector<int> ans;
+    for (int i = 0; i < N; i++)
+    {
+        if (!vis[i])
+            dfs_SCC(graph,i, vis, ans);
+    }
+
+
+    // Graph inverse.
+    vector<vector<Edge>> ngraph(N);
+    for (int i = 0; i < N; i++)
+    {
+        for (Edge e : graph[i])
+        {
+            ngraph[e.v].push_back(Edge(i, 1));
+        }
+    }
+
+    vis.clear();
+    for (int i = ans.size() - 1; i >= 0; i--)
+    {
+        int ele = ans[i];
+        if (!vis[ele])
+        {
+            vector<int> scc;
+            dfs_SCC(ngraph, ele, vis, scc);
+
+            for (int e : scc)
+                cout << e << " ";
+            cout << endl;
+        }
+    }
+}
+
 void constructGraph()
 {
     addEdge(5, 0, 10);

@@ -1,3 +1,8 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<queue>
+using namespace std;
 
 class Edge{
 
@@ -376,6 +381,8 @@ void bfs_GCC()
         }
     }
 }
+
+
 void constructgraph()
 {
     addEdge(0, 1, 10);
