@@ -180,3 +180,69 @@ using namespace std;
             
         
     }
+
+    //leetcode 954
+     bool canReorderDoubled(vector<int>& arr) {
+        
+        int n=arr.size();
+        
+        
+           sort(arr.begin(),arr.end());
+        
+        
+          unordered_map<int,int>map;
+        
+          for(int ele:arr)
+          {
+              map[ele]++;
+          }
+        
+        
+         //bool res= true;
+          for(int i=0;i<n;i++)
+          {
+              //if(arr[i]<0)
+                if(map.find(arr[i])!=map.end())
+                {
+                    if(arr[i]<0){
+                           int x=arr[i]/2;
+                           int y=arr[i]%2;
+                       if(y==0){ 
+                        if(map.find(x) !=map.end()){
+                            
+                            if(--map[arr[i]]==0)
+                                    map.erase(arr[i]);
+                            
+                             if(--map[x]==0)
+                                    map.erase(x);
+                            
+                        }
+                        else
+                           return false;
+                       }
+                        else
+                            return false;
+                        
+                           }
+                        
+                      else
+                           {
+                               
+                               if(map.find(2*arr[i]) !=map.end()){
+                            if(--map[arr[i]]==0)
+                                    map.erase(arr[i]);
+                            
+                             if(--map[2*arr[i]]==0)
+                                    map.erase(2*arr[i]);
+                        }
+                        else
+                           return false;
+                           }
+                           
+                           
+                }
+                               
+          }
+                                  
+                                  return true;
+    }

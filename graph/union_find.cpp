@@ -15,13 +15,14 @@ class Edge
     }
 
 };
+
 void addEdge(int u,int v,int w,vector<vector<Edge>>&graph)
 {
     
     graph[u].push_back(Edge(v,w));
     graph[v].push_back(Edge(u,w));
 }
-void display(vector<vector<Edge>>&graph){
+void display(int N,vector<vector<Edge>>&graph){
 
     for(int i=0;i<graph.size();i++)
     {
@@ -40,7 +41,7 @@ void display(vector<vector<Edge>>&graph){
 
 }
 vector<int>par;
-vector<int>size;
+vector<int>size1;
 
 // with Path Cpmpression :  alpha(n)  <= 4, Inverse Akermann Function
 // without path compression : O(logn)
@@ -49,17 +50,18 @@ int find_parent(int u)
     return par[u]==u?u:par[u]=find_parent(par[u]);
 }
 
+//O(1)
 void merge(int p1,int p2)
 {
    
-   if(size[p1]>size[p2])
+   if(size1[p1]>size1[p2])
     {
         par[p2]=p1;
-        size[p1]++;
+        size1[p1]++;
     }
     else{
         par[p1]=p2;
-        size[p2]++;
+        size1[p2]++;
     }
 }
 
@@ -68,15 +70,15 @@ void merge(int p1,int p2)
 // Path Compression: V + E(alpha(n))
 // without Path Compression: V + ELog(V)
 
-void union_find(int N,vector<vecto<int>>&Edges)
+void union_find(int N,vector<vector<int>>&Edges)
 {
     vector<vector<Edge>>graph(N);
     par.resize(N);
-    size.resize(N);
+    size1.resize(N);
     for(int i=0;i<N;i++)
     {
         par.push_back(i);
-        size.push_back(1);
+        size1.push_back(1);
     
     }
     
