@@ -388,3 +388,50 @@ int longestIncreasingPath(vector<vector<int>>& matrix){
           
         return dp[i][j];
     }
+
+    //leetcode 547
+     int find_par(int u)
+    {
+         return par[u]==-1?u:par[u]=find_par(par[u]);
+    }
+    
+    
+    vector<int>par;
+    int findCircleNum(vector<vector<int>>& graph) {
+        
+        int n=graph.size();
+        
+          par.resize(n,-1);
+        
+        
+          int count=n;
+      
+          int l=0;
+            for(vector<int>&arr:graph)
+            {
+                
+                 for(int i=0;i<arr.size();i++)
+                 {
+                     int u=l;
+                     int v=i;
+                     
+                        int p1=find_par(u);
+                       int p2=find_par(v);
+                     
+                    // cout<<p1<<" "<<p2<<endl;
+                     
+                        if(arr[i]==1 && p1!=p2)
+                        {
+                            par[p1]=p2;
+                        
+                             count--;
+                         //   cout<<" x"<<count<<endl;
+                        }
+                 }
+                l++;
+            }
+        
+        
+        return count;
+        
+    }
