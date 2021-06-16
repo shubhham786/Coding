@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<string>
+#include<algorithm>
 using namespace std;
 
 class Edge
@@ -15,7 +16,7 @@ class Edge
     }
 
 };
-const int N=7;
+
 
 
 void addEdge(int u,int v,int w,vector<vector<Edge>>&graph)
@@ -82,6 +83,7 @@ void merge(int p1,int p2)
 // without Path Compression: V + ELog(V)
 void union_find(int n , vector<vector<int>>&edges)
 {
+      cout<<n<<endl;
 
     parent.resize(n);
     size1.resize(n);
@@ -91,9 +93,9 @@ void union_find(int n , vector<vector<int>>&edges)
            parent[i]=i;
        }
 
-
-         vector<vector<Edge>>graph;
-   bool cycle=false;
+       
+         vector<vector<Edge>>graph(n);
+  
          for(vector<int>&arr:edges)
          {
                  int u=arr[0];
@@ -108,22 +110,36 @@ void union_find(int n , vector<vector<int>>&edges)
                          merge(p1,p2);
                         addEdge(u,v,w,graph);
                      }
-                     else
-                     {
-                         cycle=true;
-                     }
+                    
          }
-
-            display(N, graph);
-       cout<<(boolalpha)<<cycle<<endl;
-
+cout<<graph.size()<<endl;
+            display(n, graph);
+      
 }
+void solve()
+{
+    int N = 9;
+    vector<vector<int>> edges{{0, 1, 4}, {0, 7, 8},{1,7,11},{1,2,8},{7,8,7},{7,6,1},{2,8,2},
+    {8,6,2},{2,3,7},{2,5,4},
+    {6,5,2},{3,5,14},{3,4,9},{5,4,10}};
 
+    // default behaviour is increasing order.
+   // increasing order me de dega // auto&a  and auto&b bhi pass kar sakthe the
+    sort(edges.begin(), edges.end(), [](vector<int> &a, vector<int> &b) {
+        return a[2] < b[2]; 
+    });
+
+    cout<<edges.size()<<endl;
+
+    union_find(N, edges);
+}
 
 
 int main()
 {
+       solve();
 
+  return 0;
 }
 
 

@@ -342,3 +342,131 @@ string smallestEquivalentString(string A, string B, string S)
     return ans;
 }
  
+ //leetcode 839
+   
+    int find_par(int u)
+    {
+        return par[u]==u?u:par[u]=find_par(par[u]);
+    }
+    
+    vector<int>par;
+    
+    
+    bool is_permuation(string &s1, string &s2)
+    {
+       int count=0;
+       
+       for(int i=0;i<s1.size();i++)
+       {
+           if(s1[i]!=s2[i] && ++count >2)
+           {
+               return false;
+           }
+       }
+       
+       return true;
+    }
+   
+    
+    int numSimilarGroups(vector<string>& strs) {
+        
+        
+        int n=strs.size();
+        
+          par.resize(n+1);
+        
+          for(int i=0;i<=n;i++){
+              par[i]=i;
+          }
+        
+            int count=n;
+            for(int i=0;i<n;i++){
+                for(int j=i+1;j<n;j++){
+                
+                   
+                             int p1=find_par(i);
+                     int p2=find_par(j);
+                    
+                    
+                    if(p1!=p2)  
+                       {
+                         
+                            if(is_permuation(strs[i],strs[j]))
+                           {
+                                 par[p2]=p1;
+                                 count--;
+                           }
+                       }
+                    }         
+            
+            }
+        
+       
+        return count;
+        
+    }
+
+    //https://www.lintcode.com/problem/number-of-islands-ii/description
+
+    /*
+    A 2d grid map of m rows and n columns is initially filled with water. We may perform an addLand operation which turns the water at position (row, col) into a land. Given a list of positions to operate, count the number of islands after each addLand operation. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example:
+
+Given m = 3, n = 3, positions = [[0,0], [0,1], [1,2], [2,1]]. Initially, the 2d grid grid is filled with water. (Assume 0 represents water and 1 represents land).
+*/
+struct Point {
+     int x;
+      int y;
+      Point() : x(0), y(0) {}
+      Point(int a, int b) : x(a), y(b) {}
+  };
+ int findPar(int u)
+      {
+          return par[u]==u?u:par[u]=findPar(par[u]);
+      }
+     vector<int>par;
+    vector<int> numIslands2(int n, int m, vector<Point> &positions) {
+        // write your code here
+
+         par.resize(m * n, -1);
+
+    vector<vector<int>> dir = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    int count = 0;
+    vector<int> ans;
+    for (Point &pos : positions)
+    {
+        int i = pos.x;
+        int j = pos.y;
+
+        if (par[i * m + j] == -1)
+        {
+
+            par[i * m + j] = (i * m+ j);
+            count++;
+
+            for (int d = 0; d < 4; d++)
+            {
+                int x = i + dir[d][0];
+                int y = j + dir[d][1];
+
+                if (x >= 0 && y >= 0 && x < n && y < m && par[x * m + y] != -1)
+                {
+                    int p1 = findPar(i * m + j);
+                    int p2 = findPar(x * m + y);
+
+                    if (p1 != p2)
+                    {
+                        count--;
+                        par[p1] = p2;
+                    }
+                }
+            }
+        }
+
+        ans.push_back(count);
+    }
+
+     return ans;
+    }
