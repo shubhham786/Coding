@@ -818,3 +818,59 @@ bool findTarget(TreeNode *root, int k)
         
         return current;
     }
+
+
+ //leetcode  222
+
+  int height(TreeNode* root)
+    {
+        if(root==NULL)
+            return 0;
+        
+        return 1+height(root->left);
+    }
+    
+     int height1(TreeNode* root)
+    {
+        if(root==NULL)
+            return 0;
+        
+        return 1+height1(root->right);
+    }
+    
+    int countNodes(TreeNode* root) {
+        
+        
+        
+        if(root==NULL)
+        {
+             return 0; 
+        }
+        
+        int l=height(root);
+        //cout<<l<<" ";
+        
+        int r=height1(root);
+       // cout<<r<<endl;
+        
+          if(l==r)return pow(2,l)-1;
+        
+        
+        
+        return 1+countNodes(root->left)+countNodes(root->right);
+        
+    }   
+
+
+    //time complexity
+
+    /*
+    Let n be the total number of the tree. It is likely that you will get a child tree as a perfect binary tree and a non-perfect binary tree (T(n/2)) at each level.
+
+T(n) = T(n/2) + c1 lgn
+       = T(n/4) + c1 lgn + c2 (lgn - 1)
+       = ...
+       = T(1) + c [lgn + (lgn-1) + (lgn-2) + ... + 1]
+       = O(lgn*lgn)   
+
+      */ 

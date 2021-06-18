@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include<queue>
+#include<unordered_map>
+#include<unordered_set>
 
 using namespace std;
 
@@ -512,3 +514,189 @@ int minCostToSupplyWater(int n, vector<int> &wells, vector<vector<int>> &pipes)
 
     return minCostToSupplyWater_(n, pipes);
 }
+
+//leetcode 695
+ vector<int>par;
+    
+ int findPar(int u)
+    {
+        return par[u]==u?u:par[u]=findPar(par[u]);
+    }
+  int maxAreaOfIsland(vector<vector<int>> &grid)
+{
+
+    int n = grid.size();
+    int m = grid[0].size();
+
+    for (int i = 0; i < n * m; i++)
+        par.push_back(i);
+
+    vector<int> componentSize(n * m, 1);
+    int maxArea = 0;
+
+    vector<vector<int>> dir{{1, 0}, {0, 1}};
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (grid[i][j] == 1)
+            {
+                int p1 = findPar(i * m + j);
+                for (int d = 0; d < 2; d++)
+                {
+                    int x = i + dir[d][0];
+                    int y = j + dir[d][1];
+
+                    if (x >= 0 && y >= 0 && x < n && y < m && grid[x][y] == 1)
+                    {
+                        int p2 = findPar(x * m + y);
+                        if (p1 != p2)
+                        {
+                            par[p2] = p1;
+                            componentSize[p1] += componentSize[p2];
+                        }
+                    }
+                    maxArea = max(maxArea, componentSize[p1]);
+                }
+            }
+            else
+                componentSize[i * m + j] = 0;
+        }
+    }
+
+    return maxArea;
+}
+
+//https://www.hackerrank.com/challenges/journey-to-the-moon/problem
+
+vector<int>par,size1;
+
+   int find_par(int u)
+   {
+       return par[u]==u?u:par[u]=find_par(par[u]);
+   }
+long journeyToMoon(int n, vector<vector<int>> astronaut) {
+
+
+  for(int i=0;i<n;i++)
+  {
+      par.push_back(i);
+      size1.push_back(1);
+  }
+  
+  
+  for(vector<int>&arr: astronaut)
+  {
+      int p1=find_par(arr[0]);
+      int p2=find_par(arr[1]);
+      
+      if(p1!=p2)
+      {
+          par[p1]=p2;
+          size1[p2]+=size1[p1];
+      }
+  }
+  
+  long totalpair=0,sum=0;
+  
+     for(int i=0;i<n;i++)
+     {
+         if(par[i]==i)
+          {
+              totalpair+=size1[i]*sum;
+              sum +=size1[i];
+          }
+     }
+    
+    
+    return totalpair;
+  
+
+          
+}
+
+//leetcode 815 
+//bus stop
+ int numBusesToDestination(vector<vector<int>>& routes, int s, int d) {
+        
+      if(s==d)
+            return 0;
+        
+        int n=routes.size();
+    
+         unordered_map<int,vector<int>>busStandMapping;
+      unordered_set<int>isBusStandSeen;
+    vector<bool> isBusSeen(n, false);
+        
+        
+          int bus_no=0;
+        
+           for(vector<int>&arr:routes)
+           {
+                 
+                 for(int &j:arr)
+                     busStandMapping[j].push_back(bus_no);
+               
+               bus_no++;
+                     
+           }
+        
+        
+          queue<int>que;
+         que.push(s);
+          isBusStandSeen.insert(s);
+    
+        int level=0;
+            while(que.size()!=0)
+            {
+                int size=que.size();
+                
+                   while(size-->0)
+                   {
+                       int front=que.front();
+                       que.pop();
+                         
+                        vector<int>allbuses_from_this_stand=busStandMapping[front];
+                       
+                       for(int & i:allbuses_from_this_stand)
+                       {
+                           if(isBusSeen[i])
+                                 continue;
+                           
+                           
+                           for(int &j:routes[i])
+                           {
+                               
+                               if(isBusStandSeen.find(j)==isBusStandSeen.end())
+                               {
+                                     isBusStandSeen.insert(j);
+                                   
+                                   que.push(j);
+                                   
+                                   if(j==d)
+                                       return level+1;
+                                   
+                                  
+                                   
+                               }
+                           }
+                           
+                           isBusSeen[i]=true;
+                           
+                       }
+                       
+                   }
+                
+                level++;
+            }
+        
+        
+        
+        return -1;
+        
+        
+        
+        
+        
+    }

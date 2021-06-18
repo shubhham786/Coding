@@ -1087,3 +1087,44 @@ void prepare_ans(vector<vector<int>>& ans,vector<vector<int>>&smallans,int& fix_
         cout<<z;
         return ans;
     }
+
+    //leetcode 540
+      int singleNonDuplicate(vector<int>& a) {
+        
+        int si=0;
+        int ei=a.size()-1;
+        
+        int s=0;
+        int e=ei;
+        
+          while(si<ei)
+          {
+              int mid=(si+ei)/2;
+              
+              
+              if(a[mid-1]!=a[mid] && a[mid+1]!=a[mid]){
+                   return a[mid];
+              }
+              else if(a[mid-1]==a[mid])
+              {
+                  int l=mid-si+1;
+                  
+                   if(l&1)
+                      ei=mid-2;
+                  else
+                      si=mid+1;
+              }
+              else
+              {
+                  int l=ei-mid+1;
+                  
+                   if(l&1)
+                      si=mid+2;
+                  else
+                      ei=mid-1;
+              }
+              
+          }
+        
+        return a[ei];
+    }
