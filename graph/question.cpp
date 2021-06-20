@@ -700,3 +700,83 @@ long journeyToMoon(int n, vector<vector<int>> astronaut) {
         
         
     }
+  
+//leetcode 743
+  class comp{
+      
+          public:// always remeber to make public
+          bool operator()(const pair<int,int>&a,const pair<int,int>&b)const{
+              
+              return a.second>b.second;//min_heap
+          }
+    };
+    
+    
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        
+     
+        vector<vector<pair<int,int>>>graph(n + 1);
+
+    // {u -> {v,w}}
+    for (vector<int> &ar : times)
+    {
+
+      //  vector<int>ans=
+     
+         graph[ar[0]].push_back({ar[1],ar[2]});
+    }
+
+        
+         priority_queue<pair<int,int>,vector<pair<int,int>>,comp>pq;
+        
+          
+        
+          int no_of_edge=0;
+        
+                 //vtx,wsf
+                pq.push(make_pair(k,0));
+              
+        vector<bool>vis(n,false);
+        
+        int max_time=0;
+             
+          while(pq.size()!=0 && no_of_edge<n-1)
+          {
+              
+              pair<int,int>p=pq.top();
+              
+               pq.pop();
+              
+               if(vis[p.first]==true)
+                 continue;
+              
+              
+                  if(p.first!=k)
+                      no_of_edge++;
+              
+               
+              vis[p.first]=true;
+               max_time=max(max_time,p.second);
+                    
+                 for(pair<int,int> &a:graph[p.first])
+                 {
+                     if(!vis[a.first]){
+                         pq.push({a.first,a.second+p.second});
+                        
+                 } 
+                 }
+              
+              
+              
+              
+              
+          }
+              
+              
+              if(no_of_edge<n-1)
+                  return -1;
+              
+        return max_time;
+        
+        
+    }
