@@ -154,7 +154,55 @@ using namespace std;
         
     }   
 // 130
+  void surroundedRegionDFS(int i, int j, int n, int m, vector<vector<char>> &grid, vector<vector<int>> &dir)
+{
+    grid[i][j] = '$';
+    for (int d = 0; d < dir.size(); d++)
+    {
+        int r = i + dir[d][0];
+        int c = j + dir[d][1];
 
+        if (r >= 0 && c >= 0 && r < n && c < m && grid[r][c] == 'O')
+            surroundedRegionDFS(r, c, n, m, grid, dir);
+    }
+}
+
+void solve(vector<vector<char>> &grid)
+{
+    if (grid.size() == 0 || grid[0].size() == 0)
+        return;
+
+    int area = 0;
+    int n = grid.size();
+    int m = grid[0].size();
+    vector<vector<int>> dir{{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+    for (int i = 0; i < n; i++)
+    {
+        if (grid[i][0] == 'O')
+            surroundedRegionDFS(i, 0, n, m, grid, dir);
+        if (grid[i][m - 1] == 'O')
+            surroundedRegionDFS(i, m - 1, n, m, grid, dir);
+    }
+
+    for (int j = 0; j < m; j++)
+    {
+        if (grid[0][j] == 'O')
+            surroundedRegionDFS(0, j, n, m, grid, dir);
+        if (grid[n - 1][j] == 'O')
+            surroundedRegionDFS(n - 1, j, n, m, grid, dir);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (grid[i][j] == 'O')
+                grid[i][j] = 'X';
+            if (grid[i][j] == '$')
+                grid[i][j] = 'O';
+        }
+    }
+}
 
 //Multiple bfs(994,286)
 //994
@@ -230,8 +278,185 @@ int orangesRotting(vector<vector<int>>& grid) {
         return -1;
    
     }
+       //https://www.lintcode.com/problem/663/
 
+       void wallsAndGates(vector<vector<int>> &rooms) {
+        // write your code here
 
+        int n=rooms.size();
+        int m=rooms[0].size();
+          
+          queue<int>que;
+           int empty=0;
+        for(int i=0;i<n;i++){
+         for(int j=0;j<m;j++){
+            if(rooms[i][j]==0)
+               que.push(i*m+j);
+            else if(rooms[i][j]==2147483647)
+               empty++;
+         }
+        }  
+             vector<vector<int>>dir={{0,1},{0,-1},{1,0},{-1,0}};
+
+             int dist=0;
+           while(que.size()!=0)
+           {
+               int size=que.size();
+
+                  while(size-->0)
+                  {
+                      int front=que.front();
+                        que.pop();
+                      int row=front/m;
+                      int col=front%m;
+
+                      for(int i=0;i<4;i++)
+                      {
+                          int r=row+dir[i][0];
+                          int c=col+dir[i][1];
+
+                           if(r>=0 && c>=0 && r<n && c<m && rooms[r][c]==2147483647)
+                               {
+                                 
+                                      rooms[r][c]=dist+1;
+                                      que.push(r*m+c);
+                                        
+                                          empty--;
+                                      if(empty==0)
+                                        break;
+                               }
+                      }
+
+                  }
+
+                  dist++;
+           }       
+    } 
+
+  // leetcode 1765
+
+    vector<vector<int>> highestPeak(vector<vector<int>>& water) {
+        
+    int n=water.size();
+        
+     int m=water[0].size();
+        
+        queue<int>que;
+        
+          for(int i=0;i<n;i++){
+              for(int j=0;j<m;j++){
+                   if(water[i][j]==1){
+                      que.push(i*m+j);
+                       water[i][j]=0;
+                   }
+                  else{
+                      water[i][j]=-1;
+                      
+                  }
+              }
+          }
+                     
+        
+        
+           vector<vector<int>>dir={{0,1},{0,-1},{1,0},{-1,0}};
+          int level=1;
+        
+            while(que.size()!=0)
+            {
+                int size=que.size();
+                
+                    while(size-->0)
+                    {
+                        int front=que.front();
+                        que.pop();
+                        int row=front/m;
+                        int col=front%m;
+                        
+                        
+                        for(int i=0;i<4;i++)
+                        {
+                            int r=row+dir[i][0];
+                            int c=col+dir[i][1];
+                            
+                            
+                              if(r>=0 && c>=0 && r<n && c<m && water[r][c]==-1)
+                              {
+                                  water[r][c]=level;
+                                  
+                                    que.push(r*m+c);
+                              }
+                                  
+                            
+                        }
+                    }
+                
+                level++;
+            }
+        
+        
+        return water;
+        
+    }
+
+    //leetcode 1162
+
+     int maxDistance(vector<vector<int>>& grid) {
+        
+        
+        int n=grid.size();
+        
+        int m=grid[0].size();
+        
+        
+        queue<int>que;
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<m;j++)
+                {
+                      if(grid[i][j]==1){
+                            que.push(i*m+j);
+                          grid[i][j]=-1;
+                      }  
+                }
+            }
+        
+          int max1=-1;
+        
+          vector<vector<int>>dir={{0,-1},{0,1},{1,0},{-1,0}};
+          int level=0;
+            while(que.size()!=0)
+            {
+                int size=que.size();
+                
+                   while(size-->0)
+                   {
+                       int front=que.front();
+                         que.pop();
+                       int row=front/m;
+                       int col=front%m;
+                       
+                          for(int i=0;i<4;i++)
+                          {
+                              int r=row+dir[i][0];
+                              int c=col+dir[i][1];
+                              
+                              
+                                if(r>=0 && c>=0 && r<n && c<m && grid[r][c]==0)
+                                {
+                                    max1=max(max1,level+1);
+                                    grid[r][c]=-1;
+                                    
+                                      que.push(r*m+c);
+                                }
+                          }
+                       
+                     
+                   }
+                  level++;
+            }
+        
+        return max1;
+    }
     //union_find
     //leetcode 684
         
@@ -778,5 +1003,246 @@ long journeyToMoon(int n, vector<vector<int>> astronaut) {
               
         return max_time;
         
+        
+    }
+
+    //leetcode 1905
+     // good dfs question   
+    bool dfs(vector<vector<int>>& grid1,vector<vector<int>>& grid2, int i,int j,   vector<vector<int>>&dir,bool& ans )
+    {
+        
+        
+      
+        
+          if(grid1[i][j]==0)
+                ans=false;
+        
+          grid2[i][j]=0;
+        
+        
+        
+          for(int l=0;l<4;l++)
+          {
+              int x=i+dir[l][0];
+              int y=j+dir[l][1];
+              
+        if(x>=0 && y>=0 && x<grid2.size() && y< grid2[0].size() && grid2[x][y]==1)
+            dfs(grid1,grid2,x,y,dir,ans);
+          }
+        
+        return ans;
+           
+    }
+    int countSubIslands(vector<vector<int>>& grid1, vector<vector<int>>& grid2) {
+        
+        
+       
+         int n=grid1.size();
+        int m=grid1[0].size();
+        
+         vector<vector<int>>dir={{0,-1},{0,1},{1,0},{-1,0}};
+        
+       
+        int count=0;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid2[i][j]==1)
+                {
+                    //cout<<"x"<<i<<" "<<j<<endl;
+                    bool ans=true;
+                    if(dfs(grid1,grid2,i,j,dir,ans)==true){
+                        count++;
+                       //cout<<i<<" "<<j<<endl;   
+                    }
+                }
+            }
+        }
+        
+        return count;
+     
+        
+    }
+
+
+
+   //leetcode 1192
+  vector<vector<int>>ans;
+       vector<int>dis,low;
+       vector<bool>vis;int time2=0;
+    //hume bridges dhudne hai isliye call ka zarrort nahi root wala ka
+    
+    void dfs(int src,int par,vector<vector<int>>&graph)
+    {
+        dis[src]=low[src]=time2++;
+        
+        
+          vis[src]=true;
+        
+           for(int j:graph[src])
+           {
+               if(!vis[j])
+               {
+                  
+                       
+                   
+                   dfs(j,src,graph);
+                   
+                   if(dis[src]< low[j])
+                       ans.push_back({src,j});
+                   
+                   low[src]=min(low[src],low[j]);
+               }
+               else if(j!=par)
+               {
+                   low[src]=min(low[src],dis[j]);
+               }
+           }
+    }
+    
+
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        
+        
+        vector<vector<int>>graph(n);
+        
+          for(vector<int>&ar:connections)
+          {
+              graph[ar[0]].push_back(ar[1]);
+                graph[ar[1]].push_back(ar[0]);
+          }
+        
+        dis.resize(n);
+        low.resize(n);
+        vis.resize(n,false);
+        
+        dfs(0,-1,graph);
+        
+        return ans;
+         
+    }
+    //leetcode 787
+        int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+               
+        
+        
+        vector<vector<int>>dp(n,vector<int>(k+2,(int)1e9));
+        
+     //  cout<<dp.size()<<" "<<dp[0].size();
+        
+        for(int i=0;i<n;i++)
+        {
+             if(i==src)
+             {
+                 dp[i][0]=0;
+             }
+             else
+                 dp[i][0]=(int)1e9;
+        }
+        
+     //cout<<dp[0][src]<<endl;
+        int count=0;
+        for(int i=1;i<=k+1;i++){
+       
+            for(int z=0;z<n;z++)
+            {
+                dp[z][i]=dp[z][i-1];
+            }
+          for(int l=0;l<flights.size();l++){
+            int u=flights[l][0];
+           
+             int v=flights[l][1];
+             int w=flights[l][2];
+               
+            
+               if(dp[u][i-1]!=(int)1e9 && dp[u][i-1]+w <dp[v][i]){
+                    dp[v][i]= dp[u][i-1]+w;
+                   //cout<<u<<" "<<v<<" "<<count++<<endl;
+                 
+               }
+          }
+         
+        }
+        
+        return dp[dst][k+1]==(int)1e9?-1:dp[dst][k+1];
+    }
+
+    //leetcode 942
+    // see discussion , reframed question
+      int find_par(int u)
+    {
+        return par[u]==u?u:par[u]=find_par(par[u]);
+    }
+    
+    vector<int>par;
+    vector<int>size2;
+    
+    void merge(int p1,int p2)
+    {
+        if(size2[p1]>size2[p2])
+        {
+            par[p2]=p1;
+            size2[p1]+=size2[p2];
+        }
+       else
+        {
+            par[p2]=p1;
+            size2[p1]+=size2[p2];
+        }
+        
+    }
+    
+    int minMalwareSpread(vector<vector<int>>& graph, vector<int>& initial) {
+    
+        
+        int n=graph.size();
+        
+        par.resize(n);
+        size2.resize(n);
+        
+         for(int i=0;i<n;i++)
+         {
+             par[i]=i;
+             size2[i]=1;
+         }
+        
+        sort(initial.begin(),initial.end());
+        
+         for(int i=0;i<n;i++)
+         {
+             for(int j=0;j<n;j++)
+             {
+                 if(i!=j && graph[i][j]==1)
+                 {
+                     int p1=find_par(i);
+                     int p2=find_par(j);
+                     
+                     if(p1!=p2)
+                     {
+                         merge(p1,p2);
+                     }
+                 }
+             }
+         }
+            
+   vector<int>InfectedNodesInCity(n,0);
+        for (int i : initial) {
+            int leader = find_par(i);
+            InfectedNodesInCity[leader]++;
+        }
+
+        int ans = initial[0];
+        int maxPopulatedCity = 0;
+        for (int i : initial) {
+            int NoOfNodesInfected = InfectedNodesInCity[find_par(i)];
+            if (NoOfNodesInfected == 1 && size2[find_par(i)] > maxPopulatedCity) {
+                maxPopulatedCity = size2[find_par(i)];
+                ans = i;
+            }
+        }
+        
+        
+        return ans;
         
     }
