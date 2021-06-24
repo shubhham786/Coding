@@ -435,3 +435,54 @@ int longestIncreasingPath(vector<vector<int>>& matrix){
         return count;
         
     }
+
+    //leetcode 802
+        
+    //nokia game
+    // dfs, cycle detection in directed graph
+    //-1:unvisisted
+    //0:-part my current my path
+    //1:-visited but not part of my path
+    
+    bool dfs(vector<vector<int>>& graph,int src,vector<int>&vis)
+    {
+        vis[src]=0;
+        
+        bool res=true;
+         for(int &j:graph[src])
+         {
+             if(vis[j]==-1)
+                 res=res && dfs(graph,j,vis);
+             else if(vis[j]==0)
+                 return false;
+         }
+        
+        
+        if(res)
+          vis[src]=1;
+        
+         return res;
+    }
+   
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        
+        
+        int n=graph.size();
+        vector<int>vis(n,-1);
+        
+        vector<int>ans;
+          for(int i=0;i<n;i++)
+          {
+             if(vis[i]==-1)
+             {
+                 if(dfs(graph,i,vis))
+                 {
+                     ans.push_back(i);
+                 }
+                
+             }
+               else if(vis[i]==1)
+                     ans.push_back(i);
+          }
+        return ans;
+    }

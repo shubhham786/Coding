@@ -1246,3 +1246,184 @@ long journeyToMoon(int n, vector<vector<int>> astronaut) {
         return ans;
         
     }
+
+    //leetcode 959
+      
+    int find_par(int u)
+    {
+        return par[u]==u?u:par[u]=find_par(par[u]);
+    }
+    vector<int>par;
+    
+
+    int regionsBySlashes(vector<string>& grid) {
+        
+        
+        int n=grid.size();
+        
+        par.resize((n+1)*(n+1));
+        for(int i=0;i<=n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                
+                 if(i==0 || j==0 || i==n || j==n)
+                   par[i*(n+1)+j]=0;
+                else
+                    par[i*(n+1)+j]=i*(n+1)+j;
+            }
+        }
+        
+          /*for(int i=0;i<=n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                
+                cout<<par[i*(n+1)+j]<<" ";
+            }
+              cout<<endl;
+        }*/
+        int closed=1;
+        
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(grid[i][j]=='/')
+                   {
+                       int x=i;
+                       int y=j+1;
+                       int x2=i+1;
+                       int y2=j;
+                       
+                       int p1=find_par(x*(n+1)+y);
+                       int p2=find_par(x2*(n+1)+y2);
+                       
+                       if(p1!=p2)
+                       {
+                           par[p2]=p1;
+                       }
+                       else
+                       {
+                           closed++;
+                       }
+                           
+                   }
+                    else if(grid[i][j]=='\\')
+                   {
+                       int x=i;
+                       int y=j;
+                       int x2=i+1;
+                       int y2=j+1;
+                       
+                       int p1=find_par(x*(n+1)+y);
+                       int p2=find_par(x2*(n+1)+y2);
+                       
+                       if(p1!=p2)
+                       {
+                           par[p2]=p1;
+                       }
+                       else
+                       {
+                           closed++;
+                       }
+                           
+                   }
+                   
+            }
+        }
+        
+          /*for(int i=0;i<=n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                
+                cout<<par[i*(n+1)+j]<<" ";
+            }
+              cout<<endl;
+        }*/
+  
+                   
+                   return closed;
+        
+    }
+
+    //leetcode 886
+    bool bfs(vector<vector<int>>&graph,vector<int>&vis,int src)
+    {
+         queue<int>que;
+        
+         que.push(src);
+        
+        int level=0;
+        
+        
+          //vector<int>vis(n+1,-1);
+        
+          
+          while(que.size()!=0)
+          {
+              int size=que.size();
+              
+                while(size-->0)
+                {
+                   int vtx=que.front();
+                    que.pop();
+                    
+                    
+                     if(vis[vtx]!=-1)
+                     {
+                         if(vis[vtx]!=level)
+                             return false;
+                         
+                         else
+                              continue;
+                     }
+                    
+                    
+                    vis[vtx]=level;
+                   // cout<<vtx<<" "<<level<<endl;
+                    
+                    for(int &j:graph[vtx])
+                    {
+                        if(vis[j]==-1)
+                        {
+                            que.push(j);
+                        }
+                    }
+                    
+                    
+                }
+              
+              level=(level+1)%2;
+          }
+        
+        return true;
+        
+        
+    }
+    
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        
+        vector<vector<int>>graph(n+1);
+        
+         for(vector<int>&ar:dislikes)
+         {
+             graph[ar[0]].push_back(ar[1]);
+             graph[ar[1]].push_back(ar[0]);
+         }
+        
+        
+        
+        
+          vector<int>vis(n+1,-1);
+        bool ans=true;
+        for(int i=1;i<=n;i++)
+        {
+            if(vis[i]==-1)
+            ans=ans&&bfs(graph,vis,i);
+        }
+ 
+        
+        return ans;
+    }
