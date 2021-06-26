@@ -124,7 +124,7 @@ int climbStairs_dp(int n,vector<int>&dp) {
     
  int numDecodings_dp(string s,int IDX,vector<int>&dp)
     {
-      for(int idx=s.length();i>=IDX;i--)
+      for(int idx=s.length();idx>=IDX;idx--)
       {
         if(idx==s.length()){
           dp[idx]=1;
@@ -146,7 +146,7 @@ int climbStairs_dp(int n,vector<int>&dp) {
               int ch2=chr1*10+ (s[idx+1]-'0');
               
               if(ch2<=26)
-                  count+=dp[idx+2]//numDecodings_memo(s,idx+2,dp);
+                  count+=dp[idx+2];//numDecodings_memo(s,idx+2,dp);
           }
         
         dp[idx]=count;

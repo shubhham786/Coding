@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include<algorithm>
+#include<list>
 using namespace std;
 
 void print1D(vector<int> &arr)
@@ -205,14 +206,80 @@ void maze()
 
 
 //die throw
+int die_throw(int i,int tar,vector<int>&dp)
+{
+    if(i==tar)
+      return dp[i]=1;
+
+      if(dp[i]!=-1)
+        return dp[i];
+
+   int ans=0;
+        for(int j=1;j<=6;j++)
+        {
+            if(i+j<=tar) 
+              ans+=die_throw(i+j,tar,dp);
+        }
+
+         return dp[i]=ans;
+}
+  int die_DP(int SP, int ep, vector<int>&dp) {
+        for (int sp = ep; sp >= SP; sp--) {
+            if (sp == ep) {
+                dp[sp] = 1;
+                continue;
+            }
+
+            int count = 0;
+            for (int dice = 1; dice <= 6 && sp + dice <= ep; dice++) {
+                count += dp[sp + dice];// boardPath_memo(sp + dice, ep, dp);
+            }
+
+            dp[sp] = count;
+        }
+
+        return dp[SP];
+    }
+
+int die_opti(int sp, int ep) {
+        list<int> list1;
+
+        for (sp = ep; sp >= 1; sp--) {
+            if (sp >= ep - 1)
+                list1.push_front(1);
+            else {
+                if (list1.size() <= 6)
+                    list1.push_front(list1.front() * 2);
+                else
+                    {
+                        list1.push_front(list1.front() * 2 - list1.back());
+                      list1.pop_back();
+                    }
+            }
+        }
+
+        return list1.front();
+
+}
+void die()
+{
+   // vector<int>sample={1,2,3,4,5,6,7,8,9,10};
+
+  int tar=10;
+   vector<int>dp(tar+1,-1);
+
+     int ans=die_opti(1,10);
+
+   // print1D(dp);
+      cout<<ans;
 
 
-
+}
 
 int main()
 {
   //fibo();
-   maze();
-   
+  // maze();
+   die();
     return 0;
 }
