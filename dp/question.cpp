@@ -203,4 +203,141 @@ int climbStairs_dp(int n,vector<int>&dp) {
 //         return z;
         return numDecodings1(s);
         
-    }     
+    }
+
+    //leetcode 639
+    int mod=(int)1e9+7;
+    long numDecodings_dp(string s, int idx, vector<long>&dp) {
+
+        
+        for(idx=s.size();idx>=0;idx--){
+        if (idx == s.size()) {
+              dp[idx] = 1;
+              continue;
+        }
+
+   
+        
+        if (s[idx] == '0') {
+             dp[idx]=0;
+              continue;
+        }
+
+        long count = 0;
+        char ch1 = s[idx];
+
+        if (s[idx] == '*') {
+            count = (count + 9 * dp[idx+1]) % mod;
+            if (idx < s.size() - 1) {
+                char ch2 = s[(idx + 1)];
+                if (ch2 == '*')
+                    count = (count + 15*dp[idx+2]) % mod;
+                else if (ch2 >= '0' && ch2 <= '6')
+                    count = (count + 2*dp[idx+2]) % mod;
+                else if (ch2 > '6')
+                    count = (count +dp[idx+2]) % mod;
+
+            }
+        } else {
+            count = (count + dp[idx+1]) % mod;
+            if (idx < s.size() - 1) {
+                if (s[(idx + 1)] != '*') {
+                    char ch2 = s[(idx + 1)];
+                    int num = (ch1 - '0') * 10 + (ch2 - '0');
+                    if (num <= 26)
+                        count = (count + dp[idx+2]) % mod;
+                } else {
+                    if (s[idx] == '1')
+                        count = (count +  9*dp[idx+2]) % mod;
+                    else if (s[idx] == '2')
+                        count = (count + 6*dp[idx+2]) % mod;
+                }
+            }
+        }
+        dp[idx] = count;
+    }
+         
+      return dp[0];
+    }
+    int mod=(int)1e9+7;
+    long numDecodings_ii(string s, int idx ) {
+
+        long a=1,b=1;
+         if (s[s.size()-1] == '0') {
+            b=0;
+        }
+        else if(s[s.size()-1] == '*')
+        {
+            b=9;
+        }
+        for(idx=s.size()-2;idx>=0;idx--){
+      
+   
+        
+       
+
+        long count = 0;
+        char ch1 = s[idx];
+        if(ch1=='0')
+        {
+            count=0;
+        }
+       else if (ch1== '*') {
+            count = (count + 9 * b) % mod;
+            if (idx < s.size() - 1) {
+                char ch2 = s[(idx + 1)];
+                if (ch2 == '*')
+                    count = (count + 15*a) % mod;
+                else if (ch2 >= '0' && ch2 <= '6')
+                    count = (count + 2*a) % mod;
+                else if (ch2 > '6')
+                    count = (count +a) % mod;
+
+            }
+        } else {
+            count = (count + b) % mod;
+            if (idx < s.size() - 1) {
+                if (s[(idx + 1)] != '*') {
+                    char ch2 = s[(idx + 1)];
+                    int num = (ch1 - '0') * 10 + (ch2 - '0');
+                    if (num <= 26)
+                        count = (count + a) % mod;
+                } else {
+                    if (s[idx] == '1')
+                        count = (count +  9*a) % mod;
+                    else if (s[idx] == '2')
+                        count = (count + 6*a) % mod;
+                }
+            }
+        }
+         a=b;
+         b=count;
+    }
+         
+      return b;
+    }  
+        int numDecodings(string s) {
+        int l=s.size();
+        
+          //vector<long>dp(l+1,-1);
+        
+          return (int)numDecodings_ii(s,0);
+    }   
+
+      // https://www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/
+     int noOfWays(int n, int k, vector<vector<int>>&dp) {
+        if (k == 1) {
+            return dp[n][k] = 1;
+        }
+        if (n == k) {
+            return dp[n][k] = 1;
+        }
+
+        if (dp[n][k] != 0)
+            return dp[n][k];
+
+        int uniqueGroup = noOfWays(n - 1, k - 1, dp);
+        int partOfExisGroup = noOfWays(n - 1, k, dp) * k;
+
+        return dp[n][k] = uniqueGroup + partOfExisGroup;
+    }
