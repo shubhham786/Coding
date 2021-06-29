@@ -486,3 +486,64 @@ int longestIncreasingPath(vector<vector<int>>& matrix){
           }
         return ans;
     }
+    //1254
+     void dfs(int i,int j,vector<vector<int>>& grid,vector<vector<int>>& dir)
+    {
+        grid[i][j]=-1;
+        
+       for(int l=0;l<4;l++)
+       {
+           int r=i+dir[l][0];
+           int c=j+dir[l][1];
+           
+           if(r>=0 && r<grid.size() && c>=0 && c<grid[0].size() && grid[r][c]==0)
+           {
+               dfs(r,c,grid,dir);
+           }
+       }
+        
+        
+    }
+    int closedIsland(vector<vector<int>>& grid) {
+        int n=grid.size();
+        int m=grid[0].size();
+         vector<vector<int>>dir={{0,-1},{0,1},{1,0},{-1,0}};
+          for(int i=0;i<n;i++)
+          {
+              if(grid[i][0]==0)
+              {
+                  dfs(i,0,grid,dir);
+              }
+               if(grid[i][m-1]==0)
+              {
+                  dfs(i,m-1,grid,dir);
+              }
+          }
+            for(int i=0;i<m;i++)
+          {
+              if(grid[0][i]==0)
+              {
+                  dfs(0,i,grid,dir);
+              }
+                  if(grid[n-1][i]==0)
+              {
+                  dfs(n-1,i,grid,dir);
+              }
+          }
+        
+        int c=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]==0)
+                {
+                    c++;
+                    dfs(i,j,grid,dir);
+                }
+            }
+        }
+        
+        return c;
+    }

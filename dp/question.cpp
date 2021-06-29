@@ -64,6 +64,7 @@ int climbStairs_dp(int n,vector<int>&dp) {
           int cost1=(n==cost.size()?0:cost[n]);
 
         // cout<<cost1<<endl;
+        //piche se call chalye hai
          return dp[n]=cost1+min(minCostClimbingStairs_memo(n-1,cost,dp),minCostClimbingStairs_memo(n-2,cost,dp));  
             
            
@@ -154,4 +155,52 @@ int climbStairs_dp(int n,vector<int>&dp) {
         
         return dp[IDX];
     }
+   int numDecodings1(string s)
+    {
+        int a=1;
+       
+      int b=0;
         
+        if(s[s.size()-1]!='0')
+            b=1;
+        
+        for(int i=s.size()-2;i>=0;i--)
+        {
+             char ch=s[i];
+             int count=0;
+             
+            if(ch!='0')
+            {
+                count+=b;
+                
+                char ch1=s[i+1];
+                
+                int l=(ch-'0')*10+(ch1-'0');
+              //  cout<<l<<endl;
+                if(l<=26 && l>=10)
+                {
+                    count+=a;
+                }
+                
+            }
+          
+          //  cout<<i<<" "<<a<<" "<<b<<endl;
+            a=b;
+            b=count;
+                  
+        }
+        
+        return b;
+      
+    }
+        int numDecodings(string s) {
+       
+       // cout<<s.size()<<endl;
+        
+//         vector<int>dp(s.size()+1,-100);
+//       int z=numDecodings(s,0,dp);
+//         print1D(dp);
+//         return z;
+        return numDecodings1(s);
+        
+    }     
