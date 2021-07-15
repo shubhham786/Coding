@@ -322,10 +322,12 @@ void frined_print(string s,string ans)
         
         return goldMine_dp(M,dp,dir);
     }
-    int main()
-    {
-        //int l=uniquePaths(3,4);
+    // int main()
+    // {
+    //     //int l=uniquePaths(3,4);
           
-          frined_print("ABCDE","");
-        return 0;
-    }
+    //       frined_print("ABCDE","");
+    //     return 0;
+    // }
+
+ 

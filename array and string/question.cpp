@@ -329,7 +329,7 @@ class Solution{
 //leetcode 1456
   bool isvowel(char ch)
     {
-        return ch=='a' or ch=='e' or ch=='i' or ch=='o' or ch=='u';
+        return ch=='a' || ch=='e' || ch=='i' || ch=='o' || ch=='u';
     }
     int maxVowels(string s, int k) {
         
@@ -1455,3 +1455,47 @@ int main()
 
     return 0;
 }
+
+//leetcode 80
+    int removeDuplicates(vector<int>& nums) {
+        
+        int n=nums.size();
+        
+        int i=0;
+     //   int  count=0;
+        
+        int k=0,j=0;
+        //int l1=0;
+    while(i<n)
+        {
+           
+                        
+                 j=i+1;
+                int l=nums[i];
+                 while(j<n && nums[j]==l)
+                 {
+                  
+                     j++;
+                     //count++;
+                     //cout<<j<<endl;
+                     }
+                
+                if(j-i>=2)
+                {
+                    nums[k++]=nums[i];
+                    nums[k++]=nums[i];
+                }
+                else
+                    nums[k++]=nums[i];
+                    
+        
+            
+            
+              i=j;
+            
+           
+        }
+        
+        return k;
+    }
+

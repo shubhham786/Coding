@@ -1,7 +1,12 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+using namespace std;
 
 //LDS_downhill
     vector<int> LDS_LR(vector<int>&arr) {
-        int n = arr.length();
+        int n = arr.size();
         vector<int>dp(n);
         int len = 0;
         for (int i = 0; i < n; i++) {
@@ -18,8 +23,8 @@
         return dp;
     }
 
-    vector<int>LDS_RL(int[] arr) {
-        int n = arr.length();
+    vector<int>LDS_RL(vector<int>& arr) {
+        int n = arr.size();
         vector<int>dp(n);
         int len = 0;
         for (int i = n - 1; i >= 0; i--) {
@@ -36,12 +41,12 @@
         return dp;
     }
 
-     int LBS_downhill(int[] arr) {
+     int LBS_downhill(vector<int>& arr) {
         vector<int>LDS = LDS_LR(arr);
         vector<int>LIS = LDS_RL(arr);
 
         int len = 0;
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < arr.size(); i++) {
             len = max(len, LDS[i] + LIS[i] - 1);
         }
 
@@ -118,7 +123,7 @@ void lis( vector<vector<int>>&map1,vector<int>&arr,int idx,int len,string ans)
         
       
 }
-void findNumberOfLIS(vector<int>& arr) {
+void findNumberOfLIS1(vector<int>& arr) {
          
         int n = arr.size();
         vector<int> dp(n);
