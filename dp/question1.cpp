@@ -330,4 +330,75 @@ void frined_print(string s,string ans)
     //     return 0;
     // }
 
+ //leetcode 96
+ int numTrees(int n) {
+     
+    
+        vector<int>dp(n+1);
+        
+        dp[0]=1;
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=0,k=i-1;k>=0;k--,j++)
+                 dp[i]+=dp[j]*dp[k];
+        }
+        
+        return dp[n];
+    }
+
+
+    //leetcode 95
+     struct TreeNode {
+      int val;
+      TreeNode *left;
+      TreeNode *right;
+      TreeNode() : val(0), left(nullptr), right(nullptr) {}
+      TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+      TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ };
  
+
+    
+    vector<TreeNode*> generateTrees(int si,int ei)
+    {
+        if(si>ei )
+        {
+             vector<TreeNode*>ans1;
+             ans1.push_back(NULL);
+            
+             return ans1;
+     //        return {NULL};
+         }
+        
+        
+        vector<TreeNode*>ans;
+        
+        for(int i=si;i<=ei;i++)
+        {
+           
+            
+            vector<TreeNode*>l=generateTrees(si,i-1);
+            vector<TreeNode*>r=generateTrees(i+1,ei);
+            
+            for(TreeNode*a:l)
+            {
+                for(TreeNode* b:r)
+                {
+                     TreeNode* root=new TreeNode(i); 
+                    root->left=a;
+                    root->right=b;
+                    
+                    ans.push_back(root);
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    vector<TreeNode*> generateTrees(int n) {
+        
+        return generateTrees(1,n);
+        
+    }

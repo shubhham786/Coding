@@ -1026,3 +1026,123 @@ string sequenece(int i,int j, string &s,vector<vector<int>>&dp)
         
         return count;
     }
+
+    //leetcode 940
+    int distinctSubseqII(string s) {
+        int mod=(int)1e9+7;
+        
+        
+        
+        s='$'+s;
+        int l=s.size();
+        
+        vector<int>dp(l,0);
+        cout<<dp.size()<<endl;
+        dp[0]=1;
+        
+        vector<int>last_index(26,-1);
+       //int idx=s[1]-'a';
+        //cout<<last_index[idx]<<endl;
+        for(int i=1;i<l;i++)
+        {
+            dp[i]=(2*dp[i-1])%mod;
+            if(last_index[s[i]-'a']!=-1)
+            {
+                dp[i]=(dp[i]-dp[last_index[s[i]-'a']-1]+mod)%mod;
+            }
+            
+            last_index[s[i]-'a']=i;
+        }
+        
+        
+        return dp[l-1]-1;
+    }
+
+    //leetcode 1312
+       // just like longest pallindromic susbsequence
+    
+    int minInsertions(string& s,int i, int j,vector<vector<int>>&dp)
+    {
+        if(i>=j)
+            return dp[i][j]= i==j?1:0;
+        
+        
+        if(dp[i][j]!=-1)
+             return dp[i][j];
+        
+        int ans=1;
+        if(s[i]==s[j])
+            ans=minInsertions(s,i+1,j-1,dp)+2;
+        else
+            ans=max(minInsertions(s,i+1,j,dp),minInsertions(s,i,j-1,dp));
+        
+        
+        return dp[i][j]=ans;
+    }
+    
+    
+    int minInsertions(string s) {
+        
+     
+        
+         int l=s.size();
+        
+          vector<vector<int>>dp(l,vector<int>(l,-1));
+        
+        return l-minInsertions(s,0,l-1,dp);
+        
+          
+        
+    }
+
+    //leetcode 1278
+       
+    int palindromePartition(string s, int k,int idx,vector<vector<int>>&dp,vector<vector<int>>&dp1) {
+        
+        
+        if(s.size()-idx <=k)
+        {
+            return dp1[idx][k]= (s.size()-idx==k)?0:(int)1e9;
+        }
+        
+        if(k==1)return  dp1[idx][k]= dp[idx][s.size()-1];
+        
+        if(dp1[idx][k]!=-1)
+             return dp1[idx][k];
+        
+        int min_ans=(int)1e9;
+        
+        for(int i=idx;i<s.size()-1;i++)
+        {
+            int my_ans=dp[idx][i];
+            
+            int rec_ans=palindromePartition(s,k-1,i+1,dp,dp1);
+            
+            if(rec_ans!=(int)1e9)
+                min_ans=min(min_ans,my_ans+rec_ans);
+        }
+        
+        return dp1[idx][k]=min_ans;
+    }
+    int palindromePartition(string s, int k) {
+        
+        
+        int l=s.size();
+        //cout<<l<<endl;
+        vector<vector<int>>dp(l,vector<int>(l,0));
+        
+        
+        for(int gap=1;gap<l;gap++)
+        {
+            for(int i=0,j=gap;j<l;i++,j++)
+            {
+                if(gap==1)
+                    dp[i][j]= (s[i]==s[j])?0:1;
+                else
+                    dp[i][j]= (s[i]==s[j])?dp[i+1][j-1]:dp[i+1][j-1]+1;
+            }
+        }
+       // cout<<dp.size()<<endl;
+        vector<vector<int>>dp1(l,vector<int>(k+1,-1));
+        return palindromePartition(s,k,0,dp,dp1);
+    }

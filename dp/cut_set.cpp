@@ -493,6 +493,7 @@ using namespace std;
     }
 
 // surya coding question
+//https://leetcode.com/discuss/interview-question/800573/path-to-a-goal-coding-question-asked-at-gameskraft
 int mod=(int)1e9+7;
 
   int evaluate(char ch)
@@ -503,26 +504,34 @@ int mod=(int)1e9+7;
          return -1;   
   }
 
-    int possible_count(string &s,int up, int src, int dest,int idx)
+    int possible_count(string &s,int up, int src, int dest,int idx,vector<vector<int>>&dp,vector<int>&prevSame)
     {
         if(idx==s.size())
-         return 0;
+         return dp[idx][src]=0;
       
         if(src==dest)
-           return 1;
+           return dp[idx][src]=1;
 
         // if(src >up && src<0)
         //    return 0;
-           
+           if(dp[idx][src]!=-1)
+              return dp[idx][src];
                    
            int count=0;
            //if(idx<s.size())
              int x= evaluate(s[idx]);
 
-             
+                
+            
             //cout<<x<<endl;
-          if(src+x<=up && src+x>=0 )  
-              count+=possible_count(s,up,src+x,dest,idx+1);
+          if(src+x<=up && src+x>=0 )
+          {
+              if(prevSame[idx]>=0)
+              {
+                 count+=(possible_count(s,up,src+x,dest,idx+1,dp,prevSame)-possible_count(s,up,);
+              }
+          }  
+              
         
 
            count+=possible_count(s,up,src,dest,idx+1);
@@ -530,12 +539,29 @@ int mod=(int)1e9+7;
              return count%mod;   
     }
 
+
+
 int distinctMoves(string s,int n,int x,int y)
 {
     int l=s.size();
 
-//    vector<vector<int>>dp(l,vector<int>(n+1,-1));
-    return possible_count(s,n,x,y,0);
+    vector<vector<int>>dp(l+1,vector<int>(n+1,-1));
+
+    vector<int>prevSame(l);
+
+    int idxL=-1;
+    int idxR=-1;
+
+    for (int i = 0; i <l; i++) {
+        if (s[i] == 'l') {
+            prevSame[i] = idxL;
+            idxL = i;
+        } else {
+            prevSame[i] = idxR;
+            idxR = i;
+        }
+    }
+    return possible_count(s,n,x,y,0,dp,prevSame);
 }
     int main()
     {
