@@ -25,3 +25,27 @@ int cost(vector<int> B) {
             
             return ans;
 }
+
+//https://practice.geeksforgeeks.org/problems/sum-of-all-substrings-of-a-number-1587115621/1#
+
+   long long sumSubstrings(string n){
+        
+        // your code here
+         int mod=(int)1e9+7;
+    
+   
+    
+    int l=n.size();
+    
+    vector<long long>sum_of_digit(l,0);
+    
+      sum_of_digit[0]=n[0]-'0';
+      long long sum=n[0]-'0';
+       for(int i=1;i<l;i++)
+       {
+           sum_of_digit[i]=(((i+1)*(n[i]-'0'))%mod+ (10*sum_of_digit[i-1])%mod)%mod;
+           sum=(sum+sum_of_digit[i])%mod;
+       }
+       
+       return sum;
+    }
