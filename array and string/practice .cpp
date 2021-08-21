@@ -1683,3 +1683,44 @@ string orderlyQueue(string s, int k) {
            return ans;
         
     }
+
+    //leetcode 532
+    
+
+    int findPairs(vector<int>& nums, int k) {
+     
+        
+        unordered_map<int,int>map;
+        
+          for(int &val:nums)
+          {
+              map[val]++;
+          }
+        
+        int count=0;
+         
+       
+        
+        if(k>0)    
+        {
+            
+            for(auto &i:map)
+            {
+                if(map.find(i.first+k)!=map.end())
+                {
+                    count++;
+                }
+            }
+            
+        }
+        else
+        {
+            for(auto &i:map)
+            {
+                if(i.second >=2)
+                    count++;
+            }
+        }
+        
+        return count;
+    }

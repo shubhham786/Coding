@@ -877,6 +877,75 @@ string sequenece(int i,int j, string &s,vector<vector<int>>&dp)
         
     }
 
+
+//leetcode 10
+//-1->unexplored, 1-->ture, 0-->false
+    int regular_rec(string &s,string &g,int i,int j,vector<vector<int>>&dp)
+    {
+        
+        if(i==0 || j==0)
+        {
+                        if(i==0 && j==0)
+                return dp[i][j]=1;
+            else if(j>0)
+            {
+               int k=j;
+               
+                  while(j>0)
+                  {
+                      if(g[j-1]=='*')
+                      {
+                          j=j-2;
+                      }
+                      else
+                          return dp[i][k]=0;
+                  }
+                
+                return dp[i][k]=1;
+            }
+                
+            else
+                return dp[i][j]=0;
+        }
+        
+        //cout<<i<<" "<<j<<endl;
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+        
+        if(s[i-1]==g[j-1] || g[j-1]=='.')
+             return dp[i][j]=regular_rec(s,g,i-1,j-1,dp);
+        
+        else if(g[j-1]=='*')
+        {
+            bool res=false;
+             if((!s.empty()) && (g[j-2]==s[i-1] || g[j-2]=='.')){
+              
+              res=res || (regular_rec(s,g,i-1,j,dp)==1); //matches a charcther
+             }
+            res =res|| (regular_rec(s,g,i,j-2,dp)==1);//match zeroes
+            
+            
+              return dp[i][j]=(res)?1:0;
+        }
+        else
+           return dp[i][j]=0;
+            
+        
+        
+    }
+    
+    bool isMatch(string s, string g) {
+        
+         // string g=helper(p);
+           int n=s.size();
+             int m=g.size();
+         // cout<<g<<endl;
+        vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
+        
+        
+          return regular_rec(s,g,n,m,dp)==1;
+        
+    }
     //leetcode 718
         int result=0;
      int findLength(vector<int>& nums1, vector<int>& nums2,int i,int j,vector<vector<int>>&dp)
@@ -1092,6 +1161,154 @@ string sequenece(int i,int j, string &s,vector<vector<int>>&dp)
         return l-minInsertions(s,0,l-1,dp);
         
           
+        
+    }
+
+    //leetcode 131
+     vector<vector<string>> partion(string&s,int i,int j,vector<vector<bool>>&ispall)
+    {
+        
+        if(i>j)
+            return {{}};
+        
+//         if(i==j)
+//         {
+//             vector<vector<string>>ans;
+            
+//               vector<string>a;
+//              string str="";
+//               str+=s[i];
+            
+//               a.push_back(str);
+            
+//             ans.push_back(a);
+//             return ans;
+//         }
+        
+           vector<vector<string>>ans;
+          for(int cut=i;cut<=j;cut++)
+          {
+              if(ispall[i][cut])
+              {
+                  
+                 
+                  string my_part=s.substr(i,cut-i+1);
+                     ///cout<<i<<" "<<cut<<" "<<my_part<<endl;
+                   vector<vector<string>>rec_ans=partion(s,cut+1,j,ispall);
+                  
+                  for(auto & l:rec_ans)
+                  {
+                        l.insert(l.begin(),my_part);
+                  }
+                   for(auto &l:rec_ans)
+              {
+                  ans.push_back(l);
+              }
+              }
+              
+             
+          }
+        
+        return ans;
+    }
+    vector<vector<string>> partition(string s) {
+        
+        
+         int n=s.size();
+        
+          vector<vector<bool>>dp(n,vector<bool>(n,false));
+          //vector<int>cut_dp(n,-1);
+        
+           vector<vector<string>>dp1(n,vector<string>(n,"-1"));
+            for(int gap=0;gap<n;gap++)
+            {
+                for(int i=0,j=gap;j<n;j++,i++)
+                {
+                    if(gap==0)
+                        dp[i][j]=true;
+                    else if(gap==1)
+                         dp[i][j]=(s[i]==s[j]);
+                    else
+                        dp[i][j]=(s[i]==s[j])&& dp[i+1][j-1];
+                }
+            }
+        return partion(s,0,n-1,dp);
+        
+    }
+
+    //better way
+        
+    void partion(string&s,int i,int j,vector<vector<bool>>&ispall,vector<vector<string>>&ans,vector<string>&curr)
+    {
+        
+        if(i>j)
+        {
+            ans.push_back(curr);
+            
+            return ;
+        }
+        
+//         if(i==j)
+//         {
+//             vector<vector<string>>ans;
+            
+//               vector<string>a;
+//              string str="";
+//               str+=s[i];
+            
+//               a.push_back(str);
+            
+//             ans.push_back(a);
+//             return ans;
+//         }
+        
+           //vector<vector<string>>ans;
+          for(int cut=i;cut<=j;cut++)
+          {
+              if(ispall[i][cut])
+              {
+                  
+                 
+                  string my_part=s.substr(i,cut-i+1);
+                     ///cout<<i<<" "<<cut<<" "<<my_part<<endl;
+                    curr.push_back(my_part);
+                   partion(s,cut+1,j,ispall,ans,curr);
+                    curr.pop_back();
+                  
+                 
+              }
+               
+              
+             
+          }
+        
+    }
+    vector<vector<string>> partition(string s) {
+        
+        
+         int n=s.size();
+        
+          vector<vector<bool>>dp(n,vector<bool>(n,false));
+          //vector<int>cut_dp(n,-1);
+        
+           vector<vector<string>>dp1(n,vector<string>(n,"-1"));
+            for(int gap=0;gap<n;gap++)
+            {
+                for(int i=0,j=gap;j<n;j++,i++)
+                {
+                    if(gap==0)
+                        dp[i][j]=true;
+                    else if(gap==1)
+                         dp[i][j]=(s[i]==s[j]);
+                    else
+                        dp[i][j]=(s[i]==s[j])&& dp[i+1][j-1];
+                }
+            }
+        vector<vector<string>>ans;
+        vector<string>curr;
+        partion(s,0,n-1,dp,ans,curr);
+        
+        return ans;
         
     }
 
